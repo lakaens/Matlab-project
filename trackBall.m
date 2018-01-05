@@ -126,6 +126,17 @@ if xmouse > xlim(1) && xmouse < xlim(2) && ymouse > ylim(1) && ymouse < ylim(2)
 end
 guidata(hObject,handles);
 
+function a = GetMousePosition(x, y)
+
+a = zeros(3);
+
+if x^2 + y^2 < 0.5
+   a = [x; y; sqrt(1-x^2-y^2)]; 
+else
+   a = [x; y; 1/2*sqrt(x^2+y^2)]/abs([x; y; 1/2*sqrt(x^2+y^2)]);
+
+end
+
 function h = DrawCube(R)
 
 M0 = [    -1  -1 1;   %Node 1
