@@ -100,6 +100,9 @@ if xmouse > xlim(1) && xmouse < xlim(2) && ymouse > ylim(1) && ymouse < ylim(2)
 
     set(handles.figure1,'WindowButtonMotionFcn',{@my_MouseMoveFcn,hObject});
     m0=GetMousePosition(xmouse,ymouse);
+    setGlobalx(m0);
+    qk1=GetQuaternionFromVectors(m0, m0);
+    setGlobalq(qk1);
 end
 guidata(hObject,handles)
 end
@@ -120,10 +123,14 @@ ymouse = mousepos(1,2);
 
 if xmouse > xlim(1) && xmouse < xlim(2) && ymouse > ylim(1) && ymouse < ylim(2)
     m1=GetMousePosition(xmouse,ymouse);
+    r = getGlobalx;
+    dqk=GetQuaternionFromVectors(r, m1);
+    qk1 = getGlobalq;
+    qk=quaternionproduct(dqk,qk1);
     %%% DO things
     % use with the proper R matrix to rotate the cube
     R = [1 0 0; 0 -1 0;0 0 -1];
-    R=quat2rotm(quaternion);
+    R=quat2rotm(qk');
     handles.Cube = RedrawCube(R,handles.Cube);
     
 end
@@ -162,6 +169,25 @@ quaternion(2:4)= q0*pv+p0*qv+cross(qv,pv);
 
 end
 
+function setGlobalx(m0)
+global x
+x = m0;
+end
+
+function r = getGlobalx
+global x
+r = x;
+end
+
+function setGlobalq(qk1)
+global t
+t = qk1;
+end
+
+function s = getGlobalq
+global t
+s = t;
+end
 
 function h = DrawCube(R)
 
