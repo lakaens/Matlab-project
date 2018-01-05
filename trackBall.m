@@ -42,7 +42,7 @@ else
     gui_mainfcn(gui_State, varargin{:});
 end
 % End initialization code - DO NOT EDIT
-
+end
 
 % --- Executes just before trackBall is made visible.
 function trackBall_OpeningFcn(hObject, eventdata, handles, varargin)
@@ -75,7 +75,7 @@ guidata(hObject, handles);
 
 % UIWAIT makes trackBall wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
-
+end
 
 % --- Outputs from this function are returned to the command line.
 function varargout = trackBall_OutputFcn(hObject, eventdata, handles) 
@@ -86,7 +86,7 @@ function varargout = trackBall_OutputFcn(hObject, eventdata, handles)
 
 % Get default command line output from handles structure
 varargout{1} = handles.output;
-
+end
 function my_MouseClickFcn(obj,event,hObject)
 
 handles=guidata(obj);
@@ -99,14 +99,16 @@ ymouse = mousepos(1,2);
 if xmouse > xlim(1) && xmouse < xlim(2) && ymouse > ylim(1) && ymouse < ylim(2)
 
     set(handles.figure1,'WindowButtonMotionFcn',{@my_MouseMoveFcn,hObject});
+    m0=GetMousePosition(xmouse,ymouse);
 end
 guidata(hObject,handles)
+end
 
 function my_MouseReleaseFcn(obj,event,hObject)
 handles=guidata(hObject);
 set(handles.figure1,'WindowButtonMotionFcn','');
 guidata(hObject,handles);
-
+end
 function my_MouseMoveFcn(obj,event,hObject)
 
 handles=guidata(obj);
@@ -117,31 +119,49 @@ xmouse = mousepos(1,1);
 ymouse = mousepos(1,2);
 
 if xmouse > xlim(1) && xmouse < xlim(2) && ymouse > ylim(1) && ymouse < ylim(2)
-
+    m1=GetMousePosition(xmouse,ymouse);
     %%% DO things
     % use with the proper R matrix to rotate the cube
     R = [1 0 0; 0 -1 0;0 0 -1];
+    R=quat2rotm(quaternion);
     handles.Cube = RedrawCube(R,handles.Cube);
     
 end
-guidata(hObject,handles);
 
-function a = GetMousePosition(x, y)
+guidata(hObject,handles);
+end
+function [a] = GetMousePosition(x, y)
 
 if x^2 + y^2 < 0.5
    a = [x; y; sqrt(1-x^2-y^2)]; 
 else
-   a = [x; y; 1/2*sqrt(x^2+y^2)]/abs([x; y; 1/2*sqrt(x^2+y^2)]);
-
+    z=1/(2*sqrt(x^2+y*2));
+    modul=sqrt(x^2+y^2+z^2);
+   a = [x; y; z]/abs(modul);
+end
 end
 
-function q = GetQuaternionFromVectors(vec1, vec2)
+
+function [q] = GetQuaternionFromVectors(vec1, vec2)
 
 m = sqrt(2 + 2*dot(vec1, vec2));
 vec3 = (1 / m) * cross(vec1, vec2);
 q = [0.5 * m; vec3(1); vec3(2); vec3(3)];
 
 end
+function [quaternion]=quaternionproduct(q,p)
+
+q0=q(1);
+qv=q(2:4);
+p0=p(1);
+pv=p(2:4);
+
+quaternion=zeros(4,1);
+quaternion(1)= q0*p0-(qv'*pv);
+quaternion(2:4)= q0*pv+p0*qv+cross(qv,pv);
+
+end
+
 
 function h = DrawCube(R)
 
@@ -185,6 +205,7 @@ h = fill3(x,y,z, 1:6);
 for q = 1:length(c)
     h(q).FaceColor = c(q,:);
 end
+end
 
 function h = RedrawCube(R,hin)
 
@@ -227,4 +248,5 @@ z = reshape(z(con(:)),[4,6]);
 for q = 1:6
     h(q).Vertices = [x(:,q) y(:,q) z(:,q)];
     h(q).FaceColor = c(q,:);
+end
 end
