@@ -22,7 +22,7 @@ function varargout = trackBall(varargin)
 
 % Edit the above text to modify the response to help trackBall
 
-% Last Modified by GUIDE v2.5 07-Jan-2018 14:57:29
+% Last Modified by GUIDE v2.5 07-Jan-2018 15:21:23
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -526,9 +526,9 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 end
 
-% --- Executes on button press in pushbutton1.
-function pushbutton1_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton1 (see GCBO)
+% --- Executes on button press in EulerButton.
+function EulerButton_Callback(hObject, eventdata, handles)
+% hObject    handle to EulerButton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 end
@@ -625,23 +625,34 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 end
 
-% --- Executes on button press in pushbutton2.
-function pushbutton2_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton2 (see GCBO)
+% --- Executes on button press in QuaternionButton.
+function QuaternionButton_Callback(hObject, eventdata, handles)
+% hObject    handle to QuaternionButton (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+q1 = str2double(get(handles.qk1, 'string'));
+q2 = str2double(get(handles.qk2, 'string'));
+q3 = str2double(get(handles.qk3, 'string'));
+q4 = str2double(get(handles.qk4, 'string'));
+
+quaternion = [q1;q2;q3;q4];
+
+R = [1 0 0; 0 -1 0;0 0 -1];
+R = quat2rotm(quaternion');
+
+handles.Cube = RedrawCube(R,handles.Cube);
+end
+
+% --- Executes on button press in RotationVectorButton.
+function RotationVectorButton_Callback(hObject, eventdata, handles)
+% hObject    handle to RotationVectorButton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 end
 
-% --- Executes on button press in pushbutton3.
-function pushbutton3_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton3 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-end
-
-% --- Executes on button press in pushbutton4.
-function pushbutton4_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton4 (see GCBO)
+% --- Executes on button press in EPAbutton.
+function EPAbutton_Callback(hObject, eventdata, handles)
+% hObject    handle to EPAbutton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 end
