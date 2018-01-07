@@ -768,17 +768,47 @@ set(handles.RM00, 'string', R(1,1));
     set(handles.ea1, 'string', theta);
     set(handles.ea2, 'string', phi);
     set(handles.ea3, 'string', psi);
+    if isnan(theta)
+    theta=0;
+    end
+    if isnan(phi)
+    phi=0;
+    end
+    if isnan(phi)
+    phi=0;
+    end
     %euler angle and axis
     [axis,pea]=rotMat2Eaa(R);
     set(handles.EulerPrincipalAngle, 'string', pea);
     set(handles.EPAx1, 'string', axis(1));
     set(handles.EPAx2, 'string', axis(2));
     set(handles.EPAx3, 'string', axis(3));
+    if isnan(axis)
+    axis=0;
+    end
+    if isnan(axis(1))
+    axis(1)=0;
+    end
+    if isnan(axis(2))
+    axis(2)=0;
+    end
+    if isnan(axis(3))
+    axis(3)=0;
+    end
     %rotation vector
     rotvec=rotationvectorfromepa(axis,pea);
     set(handles.rv1, 'string', rotvec(1));
     set(handles.rv2, 'string', rotvec(2));
     set(handles.rv3, 'string', rotvec(3));
+    if isnan(rotvec(1))
+    rotvec(1)=0;
+    end
+    if isnan(rotvec(2))
+    rotvec(2)=0;
+    end
+    if isnan(rotvec(3))
+    rotvec(3)=0;
+    end
 end
 
 % --- Executes on button press in RotationVectorButton.
@@ -863,13 +893,25 @@ set(handles.RM00, 'string', R(1,1));
     set(handles.qk2, 'string', quat(2));
     set(handles.qk3, 'string', quat(3));
     set(handles.qk4, 'string', quat(4));
+    if isnan(quat(1))
+    quat(1)=0;
+    end
+    if isnan(quat(1))
+    quat(1)=0;
+    end
+    if isnan(quat(1))
+    quat(1)=0;
+    end
+    if isnan(quat(1))
+    quat(4)=0;
+    end
     %euler angles
     [theta,phi,psi]=rotM2eAngles(R);
     set(handles.ea1, 'string', theta);
     set(handles.ea2, 'string', phi);
     set(handles.ea3, 'string', psi);
      %rotation vector
-    rotvec=rotationvectorfromepa(axis,pea);
+    rotvec=rotationvectorfromepa(u,angle);
     set(handles.rv1, 'string', rotvec(1));
     set(handles.rv2, 'string', rotvec(2));
     set(handles.rv3, 'string', rotvec(3));
@@ -973,6 +1015,12 @@ set(handles.RM22, 'string', 0);
     set(handles.ea3, 'string', 0);
      %rotation vector
     set(handles.rv1, 'string', 0);
-    set(handles.rv2, 'string', r0);
+    set(handles.rv2, 'string', 0);
     set(handles.rv3, 'string', 0);
+      %euler principal angle and axis
+
+    set(handles.EulerPrincipalAngle, 'string',0);
+    set(handles.EPAx1, 'string', 0);
+    set(handles.EPAx2, 'string', 0);
+    set(handles.EPAx3, 'string', 0);
 end

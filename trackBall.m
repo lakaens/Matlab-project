@@ -292,7 +292,7 @@ end
 function [theta,phi,psi]=rotM2eAngles(mrotated)
 
 theta=-asind(mrotated(3,1));
-ct=cos(theta);
+ct=cosd(theta);
 phi=asind(mrotated(2,1)/ct);
 psi=asind(mrotated(3,2)/ct);
 
@@ -318,9 +318,9 @@ end
 function [rmatrix]=eAngles2rotM(theta,phi,psi)
 
 
-rmatrix=[cos(theta)*cos(phi) (cos(phi)*sin(theta)*sin(psi))-cos(psi)*sin(phi) cos(phi)*cos(psi)*sin(theta)+sin(phi)*sin(psi);
-cos(theta)*sin(phi) sin(phi)*sin(theta)*sin(phi)+cos(psi)*cos(phi) sin(phi)*sin(theta)*cos(psi)-cos(phi)*sin(psi);
--sin(theta) cos(theta)*sin(psi) cos(theta)*cos(psi)];
+rmatrix=[cosd(theta)*cosd(phi) (cosd(phi)*sind(theta)*sind(psi))-cosd(psi)*sind(phi) cosd(phi)*cosd(psi)*sind(theta)+sind(phi)*sind(psi);
+cosd(theta)*sind(phi) sind(phi)*sind(theta)*sind(phi)+cosd(psi)*cosd(phi) sind(phi)*sind(theta)*cosd(psi)-cosd(phi)*sind(psi);
+-sind(theta) cosd(theta)*sind(psi) cosd(theta)*cosd(psi)];
 
 
 end
@@ -332,7 +332,7 @@ u=[u(1);u(2);u(3)];
 modul=(sqrt((u(1)^2)+(u(2)^2)+(u(3)^2)));
 u=u/modul;
 ux= [0 -u(3) u(2);u(3) 0 -u(1);-u(2) u(1) 0];
-m = eye(3)+sin(angle)*ux+(1-cos(angle))*ux^2;
+m = eye(3)+sind(angle)*ux+(1-cosd(angle))*ux^2;
 
 end
 
@@ -633,17 +633,50 @@ set(handles.RM00, 'string', R(1,1));
     set(handles.EPAx1, 'string', axis(1));
     set(handles.EPAx2, 'string', axis(2));
     set(handles.EPAx3, 'string', axis(3));
+     if isnan(pea)
+    pea=0;
+    end
+    if isnan(axis(1))
+    axis(1)=0;
+    end
+    if isnan(axis(2))
+    axis(2)=0;
+    end
+    if isnan(axis(3))
+    axis(3)=0;
+    end
     %rotation vector
     rotvec=rotationvectorfromepa(axis,pea);
     set(handles.rv1, 'string', rotvec(1));
     set(handles.rv2, 'string', rotvec(2));
     set(handles.rv3, 'string', rotvec(3));
+    if isnan(rotvec(1))
+    rotvec(1)=0;
+    end
+    if isnan(rotvec(2))
+    rotvec(2)=0;
+    end
+    if isnan(rotvec(3))
+    rotvec(3)=0;
+    end
   %quaternion
     quat=quatfrommat(R);
     set(handles.qk1, 'string', quat(1));
     set(handles.qk2, 'string', quat(2));
     set(handles.qk3, 'string', quat(3));
     set(handles.qk4, 'string', quat(4));
+     if isnan(quat(1))
+    quat(1)=0;
+    end
+    if isnan(quat(2))
+    quat(2)=0;
+    end
+    if isnan(quat(3))
+    quat(3)=0;
+    end
+    if isnan(quat(4))
+    quat(4)=0;
+    end
 end
 
 
@@ -768,17 +801,47 @@ set(handles.RM00, 'string', R(1,1));
     set(handles.ea1, 'string', theta);
     set(handles.ea2, 'string', phi);
     set(handles.ea3, 'string', psi);
+    if isnan(theta)
+    theta=0;
+    end
+    if isnan(phi)
+    phi=0;
+    end
+    if isnan(phi)
+    phi=0;
+    end
     %euler angle and axis
     [axis,pea]=rotMat2Eaa(R);
     set(handles.EulerPrincipalAngle, 'string', pea);
     set(handles.EPAx1, 'string', axis(1));
     set(handles.EPAx2, 'string', axis(2));
     set(handles.EPAx3, 'string', axis(3));
+    if isnan(pea)
+    pea=0;
+    end
+    if isnan(axis(1))
+    axis(1)=0;
+    end
+    if isnan(axis(2))
+    axis(2)=0;
+    end
+    if isnan(axis(3))
+    axis(3)=0;
+    end
     %rotation vector
     rotvec=rotationvectorfromepa(axis,pea);
     set(handles.rv1, 'string', rotvec(1));
     set(handles.rv2, 'string', rotvec(2));
     set(handles.rv3, 'string', rotvec(3));
+    if isnan(rotvec(1))
+    rotvec(1)=0;
+    end
+    if isnan(rotvec(2))
+    rotvec(2)=0;
+    end
+    if isnan(rotvec(3))
+    rotvec(3)=0;
+    end
 end
 
 % --- Executes on button press in RotationVectorButton.
@@ -813,22 +876,51 @@ set(handles.RM00, 'string', R(1,1));
     set(handles.qk2, 'string', quat(2));
     set(handles.qk3, 'string', quat(3));
     set(handles.qk4, 'string', quat(4));
+     if isnan(quat(1))
+    quat(1)=0;
+    end
+    if isnan(quat(2))
+    quat(2)=0;
+    end
+    if isnan(quat(3))
+    quat(3)=0;
+    end
+    if isnan(quat(4))
+    quat(4)=0;
+    end
     %euler angles
     [theta,phi,psi]=rotM2eAngles(R);
     set(handles.ea1, 'string', theta);
     set(handles.ea2, 'string', phi);
     set(handles.ea3, 'string', psi);
+      if isnan(theta)
+    theta=0;
+    end
+    if isnan(phi)
+    phi=0;
+    end
+    if isnan(psi)
+    psi=0;
+    end
     %euler principal angle and axis
     [axis,pea]=rotMat2Eaa(R);
     set(handles.EulerPrincipalAngle, 'string', pea);
     set(handles.EPAx1, 'string', axis(1));
     set(handles.EPAx2, 'string', axis(2));
     set(handles.EPAx3, 'string', axis(3));
-      %rotation vector
-    rotvec=rotationvectorfromepa(axis,pea);
-    set(handles.rv1, 'string', rotvec(1));
-    set(handles.rv2, 'string', rotvec(2));
-    set(handles.rv3, 'string', rotvec(3));
+    if isnan(pea)
+    pea=0;
+    end
+    if isnan(axis(1))
+    axis(1)=0;
+    end
+    if isnan(axis(2))
+    axis(2)=0;
+    end
+    if isnan(axis(3))
+    axis(3)=0;
+    end
+   
 end
 
 % --- Executes on button press in EPAbutton.
@@ -863,16 +955,46 @@ set(handles.RM00, 'string', R(1,1));
     set(handles.qk2, 'string', quat(2));
     set(handles.qk3, 'string', quat(3));
     set(handles.qk4, 'string', quat(4));
+    if isnan(quat(1))
+    quat(1)=0;
+    end
+    if isnan(quat(2))
+    quat(2)=0;
+    end
+    if isnan(quat(3))
+    quat(3)=0;
+    end
+    if isnan(quat(4))
+    quat(4)=0;
+    end
     %euler angles
     [theta,phi,psi]=rotM2eAngles(R);
     set(handles.ea1, 'string', theta);
     set(handles.ea2, 'string', phi);
     set(handles.ea3, 'string', psi);
+     if isnan(theta)
+    theta=0;
+    end
+    if isnan(phi)
+    phi=0;
+    end
+    if isnan(psi)
+    psi=0;
+    end
      %rotation vector
     rotvec=rotationvectorfromepa(u,angle);
     set(handles.rv1, 'string', rotvec(1));
     set(handles.rv2, 'string', rotvec(2));
     set(handles.rv3, 'string', rotvec(3));
+      if isnan(rotvec(1))
+    rotvec(1)=0;
+    end
+    if isnan(rotvec(2))
+    rotvec(2)=0;
+    end
+    if isnan(rotvec(3))
+    rotvec(3)=0;
+    end
 end
 
 
