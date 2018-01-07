@@ -336,6 +336,10 @@ m = eye(3)+sin(angle)*ux+(1-cos(angle))*ux^2;
 
 end
 
+function [rotvec]=rotationvectorfromepa(u,angle)
+rotvec=angle*u;
+
+end
 
 
 function h = DrawCube(R)
@@ -623,7 +627,23 @@ set(handles.RM00, 'string', R(1,1));
     set(handles.RM20, 'string', R(3,1));
     set(handles.RM21, 'string', R(3,2));
     set(handles.RM22, 'string', R(3,3));
-%set(handles.q
+     %euler angle and axis
+    [axis,pea]=rotMat2Eaa(R);
+    set(handles.EulerPrincipalAngle, 'string', pea);
+    set(handles.EPAx1, 'string', axis(1));
+    set(handles.EPAx2, 'string', axis(2));
+    set(handles.EPAx3, 'string', axis(3));
+    %rotation vector
+    rotvec=rotationvectorfromepa(axis,pea);
+    set(handles.rv1, 'string', rotvec(1));
+    set(handles.rv2, 'string', rotvec(2));
+    set(handles.rv3, 'string', rotvec(3));
+  %quaternion
+    quat=quatfrommat(R);
+    set(handles.qk1, 'string', quat(1));
+    set(handles.qk2, 'string', quat(2));
+    set(handles.qk3, 'string', quat(3));
+    set(handles.qk4, 'string', quat(4));
 end
 
 
@@ -743,7 +763,22 @@ set(handles.RM00, 'string', R(1,1));
     set(handles.RM20, 'string', R(3,1));
     set(handles.RM21, 'string', R(3,2));
     set(handles.RM22, 'string', R(3,3));
-
+    %euler angles
+    [theta,phi,psi]=rotM2eAngles(R);
+    set(handles.ea1, 'string', theta);
+    set(handles.ea2, 'string', phi);
+    set(handles.ea3, 'string', psi);
+    %euler angle and axis
+    [axis,pea]=rotMat2Eaa(R);
+    set(handles.EulerPrincipalAngle, 'string', pea);
+    set(handles.EPAx1, 'string', axis(1));
+    set(handles.EPAx2, 'string', axis(2));
+    set(handles.EPAx3, 'string', axis(3));
+    %rotation vector
+    rotvec=rotationvectorfromepa(axis,pea);
+    set(handles.rv1, 'string', rotvec(1));
+    set(handles.rv2, 'string', rotvec(2));
+    set(handles.rv3, 'string', rotvec(3));
 end
 
 % --- Executes on button press in RotationVectorButton.
@@ -789,6 +824,11 @@ set(handles.RM00, 'string', R(1,1));
     set(handles.EPAx1, 'string', axis(1));
     set(handles.EPAx2, 'string', axis(2));
     set(handles.EPAx3, 'string', axis(3));
+      %rotation vector
+    rotvec=rotationvectorfromepa(axis,pea);
+    set(handles.rv1, 'string', rotvec(1));
+    set(handles.rv2, 'string', rotvec(2));
+    set(handles.rv3, 'string', rotvec(3));
 end
 
 % --- Executes on button press in EPAbutton.
@@ -817,6 +857,22 @@ set(handles.RM00, 'string', R(1,1));
     set(handles.RM20, 'string', R(3,1));
     set(handles.RM21, 'string', R(3,2));
     set(handles.RM22, 'string', R(3,3));
+    %quaternion
+    quat=quatfrommat(R);
+    set(handles.qk1, 'string', quat(1));
+    set(handles.qk2, 'string', quat(2));
+    set(handles.qk3, 'string', quat(3));
+    set(handles.qk4, 'string', quat(4));
+    %euler angles
+    [theta,phi,psi]=rotM2eAngles(R);
+    set(handles.ea1, 'string', theta);
+    set(handles.ea2, 'string', phi);
+    set(handles.ea3, 'string', psi);
+     %rotation vector
+    rotvec=rotationvectorfromepa(u,angle);
+    set(handles.rv1, 'string', rotvec(1));
+    set(handles.rv2, 'string', rotvec(2));
+    set(handles.rv3, 'string', rotvec(3));
 end
 
 
@@ -897,13 +953,32 @@ function Reset_Callback(hObject, eventdata, handles)
 
 R = [1 0 0; 0 -1 0;0 0 1];
 handles.Cube = RedrawCube(R,handles.Cube);
-set(handles.RM00, 'string', R(1,1));
-set(handles.RM01, 'string', R(1,2));
-set(handles.RM02, 'string', R(1,3));
-set(handles.RM10, 'string', R(2,1));
-set(handles.RM11, 'string', R(2,2));
-set(handles.RM12, 'string', R(2,3));
-set(handles.RM20, 'string', R(3,1));
-set(handles.RM21, 'string', R(3,2));
-set(handles.RM22, 'string', R(3,3));
+set(handles.RM00, 'string', 0);
+set(handles.RM01, 'string', 0);
+set(handles.RM02, 'string', 0);
+set(handles.RM10, 'string', 0);
+set(handles.RM11, 'string', 0);
+set(handles.RM12, 'string', 0);
+set(handles.RM20, 'string', 0);
+set(handles.RM21, 'string', 0);
+set(handles.RM22, 'string', 0);
+%quaternion
+    set(handles.qk1, 'string', 0);
+    set(handles.qk2, 'string', 0);
+    set(handles.qk3, 'string', 0);
+    set(handles.qk4, 'string', 0);
+    %euler angles
+    set(handles.ea1, 'string', 0);
+    set(handles.ea2, 'string', 0);
+    set(handles.ea3, 'string', 0);
+     %rotation vector
+    set(handles.rv1, 'string', 0);
+    set(handles.rv2, 'string', 0);
+    set(handles.rv3, 'string', 0);
+      %euler principal angle and axis
+
+    set(handles.EulerPrincipalAngle, 'string',0);
+    set(handles.EPAx1, 'string', 0);
+    set(handles.EPAx2, 'string', 0);
+    set(handles.EPAx3, 'string', 0);
 end
