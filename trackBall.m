@@ -127,23 +127,24 @@ if xmouse > xlim(1) && xmouse < xlim(2) && ymouse > ylim(1) && ymouse < ylim(2)
     dqk=GetQuaternionFromVectors(r, m1);
     qk1 = getGlobalqk1;
     qk=quaternionproduct(dqk,qk1);
-    setGlobalqk(qk);
+    %setGlobalqk(qk);
     %%% DO things
     % use with the proper R matrix to rotate the cube
     R = [1 0 0; 0 -1 0;0 0 -1];
-    R=quat2rotm(qk');
+    R=matrixfromquaternion(qk);
     handles.Cube = RedrawCube(R,handles.Cube);
     [t,ph,ps]=rotM2eAngles(R);
     setGlobalt(t);
     setGlobalph(ph);
     setGlobalps(ps);
-    
+    [axis,pea]=rotMat2Eaa(R);
+    rvect=rotationMatrixToVector(R);
     %quaternion guide
     q=getGlobalqk;
-    set(handles.qk1,'string', q(1));
-    set(handles.qk2,'string', q(2));
-    set(handles.qk3,'string', q(3));
-    set(handles.qk4,'string', q(4));
+    set(handles.qk1,'string', qk(1));
+    set(handles.qk2,'string', qk(2));
+    set(handles.qk3,'string', qk(3));
+    set(handles.qk4,'string', qk(4));
     
     %euler angles guide
     tangle=getGlobalt;
@@ -163,6 +164,17 @@ if xmouse > xlim(1) && xmouse < xlim(2) && ymouse > ylim(1) && ymouse < ylim(2)
     set(handles.RM20, 'string', R(3,1));
     set(handles.RM21, 'string', R(3,2));
     set(handles.RM22, 'string', R(3,3));
+    
+    %euler angle and axis
+    set(handles.EulerPrincipalAngle, 'string', pea);
+    set(handles.EPAx1, 'string', axis(1));
+    set(handles.EPAx2, 'string', axis(2));
+    set(handles.EPAx3, 'string', axis(3));
+    
+    %rotation vector
+    set(handles.rv1, 'string', rvect(1));
+    set(handles.rv2, 'string', rvect(2));
+    set(handles.rv3, 'string', rvect(3));
 end
 
 
@@ -261,7 +273,22 @@ global psi
 psangle=psi;
 end
 
+function [MatrixR]=matrixfromquaternion(quaternion)
 
+quaternion=[quaternion(1);quaternion(2);quaternion(3);quaternion(4)];
+q0=quaternion(1);
+qv=quaternion(2:4);
+qx=[0 -qv(3) qv(2);qv(3) 0 -qv(1);-qv(2) qv(1) 0];
+MatrixR=(q0^2-(qv'*qv))*eye(3)+(2*(qv*qv'))+(2*(q0*qx));
+
+end
+function [quatm]=quatfrommat(matrix)
+q0=((1+matrix(1,1)+matrix(2,2)+matrix(3,3))^2)/4;
+q1=((1+matrix(1,1)-matrix(2,2)-matrix(3,3))^2)/4;
+q2=((1-matrix(1,1)+matrix(2,2)-matrix(3,3))^2)/4;
+q3=((1-matrix(1,1)-matrix(2,2)+matrix(3,3))^2)/4;
+quatm=[q0;q1;q2;q3];
+end
 function [theta,phi,psi]=rotM2eAngles(mrotated)
 
 theta=-asind(mrotated(3,1));
@@ -272,18 +299,19 @@ psi=asind(mrotated(3,2)/ct);
 end
 
 %from rotated matrix to euler angles
-function [axis,angle]=rotMat2Eaa(mrotated)
+function [axis,pea]=rotMat2Eaa(mrotated)
 
 mrotatedt=mrotated';
-angle=(acos((trace(mrotated)-1)/2))
+pea=(acosd((trace(mrotated)-1)/2));
 
-rot=(mrotated-mrotatedt)/(2*sin(angle));
+rot=(mrotated-mrotatedt)/(2*sind(pea));
 
 axis=zeros(3,1);
 
 axis(1,1)=-rot(2,3);
 axis(2,1)=rot(1,3);
 axis(3,1)=-rot(2,1);
+
 end
 
 %from euler angles to rotated matrix
@@ -586,7 +614,16 @@ R = [1 0 0; 0 -1 0;0 0 -1];
 R=eAngles2rotM(theta,phi,psi);
 
 handles.Cube = RedrawCube(R,handles.Cube);
-
+set(handles.RM00, 'string', R(1,1));
+    set(handles.RM01, 'string', R(1,2));
+    set(handles.RM02, 'string', R(1,3));
+    set(handles.RM10, 'string', R(2,1));
+    set(handles.RM11, 'string', R(2,2));
+    set(handles.RM12, 'string', R(2,3));
+    set(handles.RM20, 'string', R(3,1));
+    set(handles.RM21, 'string', R(3,2));
+    set(handles.RM22, 'string', R(3,3));
+%set(handles.q
 end
 
 
@@ -724,6 +761,7 @@ angle=abs(sqrt(x^2+y^2+z^2));
 R = Eaa2rotMat(v,angle);
 
 handles.Cube = RedrawCube(R,handles.Cube);
+
 set(handles.RM00, 'string', R(1,1));
     set(handles.RM01, 'string', R(1,2));
     set(handles.RM02, 'string', R(1,3));
@@ -733,6 +771,24 @@ set(handles.RM00, 'string', R(1,1));
     set(handles.RM20, 'string', R(3,1));
     set(handles.RM21, 'string', R(3,2));
     set(handles.RM22, 'string', R(3,3));
+    
+    %quaternion
+    quat=quatfrommat(R);
+    set(handles.qk1, 'string', quat(1));
+    set(handles.qk2, 'string', quat(2));
+    set(handles.qk3, 'string', quat(3));
+    set(handles.qk4, 'string', quat(4));
+    %euler angles
+    [theta,phi,psi]=rotM2eAngles(R);
+    set(handles.ea1, 'string', theta);
+    set(handles.ea2, 'string', phi);
+    set(handles.ea3, 'string', psi);
+    %euler principal angle and axis
+    [axis,pea]=rotMat2Eaa(R);
+    set(handles.EulerPrincipalAngle, 'string', pea);
+    set(handles.EPAx1, 'string', axis(1));
+    set(handles.EPAx2, 'string', axis(2));
+    set(handles.EPAx3, 'string', axis(3));
 end
 
 % --- Executes on button press in EPAbutton.
@@ -842,12 +898,12 @@ function Reset_Callback(hObject, eventdata, handles)
 R = [1 0 0; 0 -1 0;0 0 1];
 handles.Cube = RedrawCube(R,handles.Cube);
 set(handles.RM00, 'string', R(1,1));
-    set(handles.RM01, 'string', R(1,2));
-    set(handles.RM02, 'string', R(1,3));
-    set(handles.RM10, 'string', R(2,1));
-    set(handles.RM11, 'string', R(2,2));
-    set(handles.RM12, 'string', R(2,3));
-    set(handles.RM20, 'string', R(3,1));
-    set(handles.RM21, 'string', R(3,2));
-    set(handles.RM22, 'string', R(3,3));
+set(handles.RM01, 'string', R(1,2));
+set(handles.RM02, 'string', R(1,3));
+set(handles.RM10, 'string', R(2,1));
+set(handles.RM11, 'string', R(2,2));
+set(handles.RM12, 'string', R(2,3));
+set(handles.RM20, 'string', R(3,1));
+set(handles.RM21, 'string', R(3,2));
+set(handles.RM22, 'string', R(3,3));
 end
