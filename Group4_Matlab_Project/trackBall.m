@@ -138,7 +138,8 @@ if xmouse > xlim(1) && xmouse < xlim(2) && ymouse > ylim(1) && ymouse < ylim(2)
     setGlobalph(ph);
     setGlobalps(ps);
     [axis,pea]=rotMat2Eaa(R);
-    rvect=rotationMatrixToVector(R);
+    [axisr,angler]=rotMat2Eaa(R);
+    rvect=rotationvectorfromepa(axisr,angler);
     %quaternion guide
     q=getGlobalqk;
     set(handles.qk1,'string', qk(1));
