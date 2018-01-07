@@ -22,7 +22,7 @@ function varargout = trackBall(varargin)
 
 % Edit the above text to modify the response to help trackBall
 
-% Last Modified by GUIDE v2.5 05-Jan-2018 20:09:15
+% Last Modified by GUIDE v2.5 07-Jan-2018 00:43:12
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -100,9 +100,9 @@ if xmouse > xlim(1) && xmouse < xlim(2) && ymouse > ylim(1) && ymouse < ylim(2)
 
     set(handles.figure1,'WindowButtonMotionFcn',{@my_MouseMoveFcn,hObject});
     m0=GetMousePosition(xmouse,ymouse);
-    setGlobalx(m0);
+    setGlobalm0(m0);
     qk1=GetQuaternionFromVectors(m0, m0);
-    setGlobalq(qk1);
+    setGlobalqk1(qk1);
 end
 guidata(hObject,handles)
 end
@@ -123,20 +123,27 @@ ymouse = mousepos(1,2);
 
 if xmouse > xlim(1) && xmouse < xlim(2) && ymouse > ylim(1) && ymouse < ylim(2)
     m1=GetMousePosition(xmouse,ymouse);
-    r = getGlobalx;
+    r = getGlobalm0;
     dqk=GetQuaternionFromVectors(r, m1);
-    qk1 = getGlobalq;
+    qk1 = getGlobalqk1;
     qk=quaternionproduct(dqk,qk1);
+    setGlobalqk(qk);
     %%% DO things
     % use with the proper R matrix to rotate the cube
     R = [1 0 0; 0 -1 0;0 0 -1];
     R=quat2rotm(qk');
     handles.Cube = RedrawCube(R,handles.Cube);
+    [t,ph,ps]=rotM2eAngles(R);
+    setGlobalt(t);
+    setGlobalph(ph);
+    setGlobalps(ps);
     
 end
 
+
 guidata(hObject,handles);
 end
+
 function [a] = GetMousePosition(x, y)
 
 if x^2 + y^2 < 0.5
@@ -169,24 +176,73 @@ quaternion(2:4)= q0*pv+p0*qv+cross(qv,pv);
 
 end
 
-function setGlobalx(m0)
+function setGlobalm0(m0)
 global x
 x = m0;
 end
 
-function r = getGlobalx
+function r = getGlobalm0
 global x
 r = x;
 end
 
-function setGlobalq(qk1)
+function setGlobalqk1(qk1)
 global t
 t = qk1;
 end
 
-function s = getGlobalq
+function s = getGlobalqk1
 global t
 s = t;
+end
+
+function setGlobalqk(qk)
+global z
+z=qk;
+end
+
+function q=getGlobalqk
+global z
+q=z;
+end
+
+function setGlobalt(t)
+global theta
+theta=t;
+end
+
+function tangle=getGlobalt
+global theta
+tangle=theta;
+end
+
+function setGlobalph(ph)
+global phi
+phi=ph;
+end
+
+function phangle=getGlobalph
+global phi
+phangle=phi;
+end
+
+function setGlobalps(ps)
+global psi
+psi=ps;
+end
+
+function psangle=getGlobalps
+global psi
+psangle=psi;
+end
+
+function [theta,phi,psi]=rotM2eAngles(mrotated)
+
+theta=-asin(mrotated(3,1))
+ct=cos(theta);
+phi=asin(mrotated(2,1)/ct)
+psi=asin(mrotated(3,2)/ct)
+
 end
 
 function h = DrawCube(R)
@@ -286,7 +342,9 @@ function edit1_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of edit1 as text
 %        str2double(get(hObject,'String')) returns contents of edit1 as a double
-
+q=getGlobalqk;
+set(handles.edit1,'string', q(1));
+end
 
 % --- Executes during object creation, after setting all properties.
 function edit1_CreateFcn(hObject, eventdata, handles)
@@ -309,7 +367,9 @@ function edit2_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of edit2 as text
 %        str2double(get(hObject,'String')) returns contents of edit2 as a double
-
+q=getGlobalqk;
+set(handles.edit2,'string', q(2));
+end
 
 % --- Executes during object creation, after setting all properties.
 function edit2_CreateFcn(hObject, eventdata, handles)
@@ -332,7 +392,9 @@ function edit3_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of edit3 as text
 %        str2double(get(hObject,'String')) returns contents of edit3 as a double
-
+q=getGlobalqk;
+set(handles.edit3,'string', q(3));
+end
 
 % --- Executes during object creation, after setting all properties.
 function edit3_CreateFcn(hObject, eventdata, handles)
@@ -355,7 +417,9 @@ function edit4_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of edit4 as text
 %        str2double(get(hObject,'String')) returns contents of edit4 as a double
-
+q=getGlobalqk;
+set(handles.edit4,'string', q(4));
+end
 
 % --- Executes during object creation, after setting all properties.
 function edit4_CreateFcn(hObject, eventdata, handles)
@@ -378,8 +442,10 @@ function edit5_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of edit5 as text
 %        str2double(get(hObject,'String')) returns contents of edit5 as a double
+tangle=getGlobalt;
+set(handles.edit5,'string', tangle);
 
-
+end
 % --- Executes during object creation, after setting all properties.
 function edit5_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to edit5 (see GCBO)
@@ -401,7 +467,9 @@ function edit6_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of edit6 as text
 %        str2double(get(hObject,'String')) returns contents of edit6 as a double
-
+phangle=getGlobalph;
+set(handles.edit6,'string', phangle);
+end
 
 % --- Executes during object creation, after setting all properties.
 function edit6_CreateFcn(hObject, eventdata, handles)
@@ -424,7 +492,9 @@ function edit7_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of edit7 as text
 %        str2double(get(hObject,'String')) returns contents of edit7 as a double
-
+psangle=getGlobalps;
+set(handles.edit7,'string', psangle);
+end
 
 % --- Executes during object creation, after setting all properties.
 function edit7_CreateFcn(hObject, eventdata, handles)
@@ -545,7 +615,7 @@ function edit15_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of edit15 as text
 %        str2double(get(hObject,'String')) returns contents of edit15 as a double
-
+end
 
 % --- Executes during object creation, after setting all properties.
 function edit15_CreateFcn(hObject, eventdata, handles)
@@ -568,7 +638,7 @@ function edit16_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of edit16 as text
 %        str2double(get(hObject,'String')) returns contents of edit16 as a double
-
+end
 
 % --- Executes during object creation, after setting all properties.
 function edit16_CreateFcn(hObject, eventdata, handles)
@@ -596,6 +666,96 @@ function edit17_Callback(hObject, eventdata, handles)
 % --- Executes during object creation, after setting all properties.
 function edit17_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to edit17 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in pushbutton2.
+function pushbutton2_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in pushbutton3.
+function pushbutton3_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton3 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in pushbutton4.
+function pushbutton4_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton4 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+
+function edit26_Callback(hObject, eventdata, handles)
+% hObject    handle to edit26 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit26 as text
+%        str2double(get(hObject,'String')) returns contents of edit26 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit26_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit26 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit25_Callback(hObject, eventdata, handles)
+% hObject    handle to edit25 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit25 as text
+%        str2double(get(hObject,'String')) returns contents of edit25 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit25_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit25 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit24_Callback(hObject, eventdata, handles)
+% hObject    handle to edit24 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit24 as text
+%        str2double(get(hObject,'String')) returns contents of edit24 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit24_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit24 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
