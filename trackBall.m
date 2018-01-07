@@ -138,6 +138,11 @@ if xmouse > xlim(1) && xmouse < xlim(2) && ymouse > ylim(1) && ymouse < ylim(2)
     setGlobalph(ph);
     setGlobalps(ps);
     
+    q=getGlobalqk;
+    set(handles.edit1,'string', q(1));
+    set(handles.edit2,'string', q(2));
+    set(handles.edit3,'string', q(3));
+    set(handles.edit4,'string', q(4));
 end
 
 
@@ -343,7 +348,6 @@ function edit1_Callback(hObject, eventdata, handles)
 % Hints: get(hObject,'String') returns contents of edit1 as text
 %        str2double(get(hObject,'String')) returns contents of edit1 as a double
 q=getGlobalqk;
-set(handles.edit1,'string', q(1));
 end
 
 
@@ -370,7 +374,6 @@ function edit2_Callback(hObject, eventdata, handles)
 % Hints: get(hObject,'String') returns contents of edit2 as text
 %        str2double(get(hObject,'String')) returns contents of edit2 as a double
 q=getGlobalqk;
-set(handles.edit2,'string', q(2));
 end
 
 
@@ -397,7 +400,6 @@ function edit3_Callback(hObject, eventdata, handles)
 % Hints: get(hObject,'String') returns contents of edit3 as text
 %        str2double(get(hObject,'String')) returns contents of edit3 as a double
 q=getGlobalqk;
-set(handles.edit3,'string', q(3));
 end
 
 % --- Executes during object creation, after setting all properties.
@@ -422,7 +424,6 @@ function edit4_Callback(hObject, eventdata, handles)
 % Hints: get(hObject,'String') returns contents of edit4 as text
 %        str2double(get(hObject,'String')) returns contents of edit4 as a double
 q=getGlobalqk;
-set(handles.edit4,'string', q(4));
 end
 
 % --- Executes during object creation, after setting all properties.

@@ -22,7 +22,7 @@ function varargout = trackBall(varargin)
 
 % Edit the above text to modify the response to help trackBall
 
-% Last Modified by GUIDE v2.5 07-Jan-2018 00:43:12
+% Last Modified by GUIDE v2.5 07-Jan-2018 14:37:46
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -137,6 +137,9 @@ if xmouse > xlim(1) && xmouse < xlim(2) && ymouse > ylim(1) && ymouse < ylim(2)
     setGlobalt(t);
     setGlobalph(ph);
     setGlobalps(ps);
+    
+    q=getGlobalqk;
+    set(handles.edit1,'string', q(1));
     
 end
 
@@ -528,7 +531,7 @@ function edit14_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of edit14 as text
 %        str2double(get(hObject,'String')) returns contents of edit14 as a double
-
+end
 
 % --- Executes during object creation, after setting all properties.
 function edit14_CreateFcn(hObject, eventdata, handles)
@@ -541,7 +544,7 @@ function edit14_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
-
+end
 
 
 function edit15_Callback(hObject, eventdata, handles)
@@ -551,7 +554,7 @@ function edit15_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of edit15 as text
 %        str2double(get(hObject,'String')) returns contents of edit15 as a double
-
+end
 
 % --- Executes during object creation, after setting all properties.
 function edit15_CreateFcn(hObject, eventdata, handles)
@@ -564,7 +567,7 @@ function edit15_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
-
+end
 
 
 function edit16_Callback(hObject, eventdata, handles)
@@ -574,7 +577,7 @@ function edit16_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of edit16 as text
 %        str2double(get(hObject,'String')) returns contents of edit16 as a double
-
+end
 
 % --- Executes during object creation, after setting all properties.
 function edit16_CreateFcn(hObject, eventdata, handles)
@@ -587,7 +590,7 @@ function edit16_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
-
+end
 
 
 function edit17_Callback(hObject, eventdata, handles)
@@ -597,7 +600,7 @@ function edit17_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of edit17 as text
 %        str2double(get(hObject,'String')) returns contents of edit17 as a double
-
+end
 
 % --- Executes during object creation, after setting all properties.
 function edit17_CreateFcn(hObject, eventdata, handles)
@@ -610,28 +613,28 @@ function edit17_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
-
+end
 
 % --- Executes on button press in pushbutton2.
 function pushbutton2_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton2 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
+end
 
 % --- Executes on button press in pushbutton3.
 function pushbutton3_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton3 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
+end
 
 % --- Executes on button press in pushbutton4.
 function pushbutton4_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton4 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
+end
 
 
 function edit26_Callback(hObject, eventdata, handles)
@@ -641,7 +644,7 @@ function edit26_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of edit26 as text
 %        str2double(get(hObject,'String')) returns contents of edit26 as a double
-
+end
 
 % --- Executes during object creation, after setting all properties.
 function edit26_CreateFcn(hObject, eventdata, handles)
@@ -654,7 +657,7 @@ function edit26_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
-
+end
 
 
 function edit25_Callback(hObject, eventdata, handles)
@@ -664,7 +667,7 @@ function edit25_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of edit25 as text
 %        str2double(get(hObject,'String')) returns contents of edit25 as a double
-
+end
 
 % --- Executes during object creation, after setting all properties.
 function edit25_CreateFcn(hObject, eventdata, handles)
@@ -677,7 +680,7 @@ function edit25_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
-
+end
 
 
 function edit24_Callback(hObject, eventdata, handles)
@@ -687,7 +690,7 @@ function edit24_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of edit24 as text
 %        str2double(get(hObject,'String')) returns contents of edit24 as a double
-
+end
 
 % --- Executes during object creation, after setting all properties.
 function edit24_CreateFcn(hObject, eventdata, handles)
@@ -699,4 +702,5 @@ function edit24_CreateFcn(hObject, eventdata, handles)
 %       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
+end
 end
